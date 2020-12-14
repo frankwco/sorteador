@@ -1,17 +1,46 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Tab 1
-    </ion-title>
+<ion-header>
+  <ion-toolbar color="warning">
+    <ion-buttons slot="start">
+     <ion-back-button></ion-back-button>
+   </ion-buttons>
+    <ion-title>Sorteio - Times/Equipes</ion-title>
+  </ion-toolbar>
+  <ion-toolbar color="warning">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <center><ion-title>
+              Adicionar Pessoas
+            </ion-title></center>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+  <ion-item>
+  <ion-input #nome name="nome" placeholder="Insira um nome" [(ngModel)]="pessoa.nome"></ion-input>
+  <ion-button color="primary" (click)="inserirPessoa()">Add</ion-button>
+</ion-item>
+
+<ion-item lines="none">
+  <ion-checkbox [(ngModel)]="selecionar" (click)="selecionarTodos()"></ion-checkbox>
+  <ion-label>
+    <h5>&nbsp;&nbsp;Marcar/Desmarcar Todos</h5>
+  </ion-label>
+</ion-item>
+
+  <ion-list>
+    <ion-item *ngFor="let pes of listaPessoa" >
+      <ion-checkbox color="secondary"  [ngModel]="pes.selecionado" (click)="marcarDesmarcar(pes.id)"></ion-checkbox>&nbsp;&nbsp;
+      <ion-label>
+        <h5>{{pes.nome}}</h5>
+      </ion-label>
+        <ion-button color="light" (click)="excluirPessoa(pes.id)"><ion-icon name="trash-outline" color="danger"></ion-icon></ion-button>
+
+    </ion-item>
+  </ion-list>
+  <br/><br/><br/>
 </ion-content>

@@ -1,5 +1,7 @@
 {
   "name": "sorteador",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

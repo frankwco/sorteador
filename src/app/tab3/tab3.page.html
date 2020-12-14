@@ -1,17 +1,67 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Tab 3
-    </ion-title>
+<ion-header>
+  <!--<ion-toolbar color="warning">
+    <ion-buttons slot="start">
+     <ion-back-button></ion-back-button>
+   </ion-buttons>
+    <ion-title>Sorteador - the best</ion-title>
+  </ion-toolbar>-->
+  <ion-toolbar color="warning">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-title>
+            Placar da rodada
+            </ion-title>
+          </ion-col>
+
+        </ion-row>
+      </ion-grid>
+      <ion-buttons slot="end">
+       <ion-button (click)="zerar()">
+         <ion-icon name="trash-outline" color="danger" ></ion-icon>
+       </ion-button>
+
+     </ion-buttons>
   </ion-toolbar>
+
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 3</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
 
-  <app-explore-container name="Tab 3 page"></app-explore-container>
+  <ion-grid>
+
+    <ion-row>
+      <ion-col>
+        <center><span style="font-size:20px">Time A</span></center>
+      </ion-col>
+      <ion-col>
+            <center><span style="font-size:20px">Time B</span></center>
+      </ion-col>
+    </ion-row>
+
+  <ion-row>
+    <ion-col>
+      <center><ion-button color="success" (click)="adicionar('a')">Adicionar +1</ion-button><ion-button (click)="remover('a')" color="danger">-1</ion-button></center>
+    </ion-col>
+    <ion-col>
+        <center><ion-button (click)="adicionar('b')">Adicionar +1</ion-button><ion-button (click)="remover('b')" color="danger">-1</ion-button></center>
+    </ion-col>
+  </ion-row>
+
+
+
+  <ion-row>
+    <ion-col>
+      <center><span style="font-size:100px">{{timea}} </span></center>
+    </ion-col>
+    <ion-col>
+        <center><span style="font-size:100px">{{timeb}} </span></center>
+    </ion-col>
+  </ion-row>
+
+</ion-grid>
+
 </ion-content>
+<ion-footer>
+
+</ion-footer>
