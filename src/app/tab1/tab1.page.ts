@@ -12,6 +12,7 @@ export class Tab1Page {
   pessoa;
   listaPessoa = [];
   selecionar=false;
+  selecionados=0;
 
   constructor(private storage: Storage, public alertController: AlertController) {
     this.pessoa = { id: '', nome: '', selecionado: true };
@@ -26,11 +27,21 @@ export class Tab1Page {
     this.buscarTodos();
   }
 
+  chamarTab2(){
+    
+  }
+
   buscarTodos() {
     this.storage.get('listaPessoa').then((val) => {
       if (val != null) {
         this.listaPessoa = val;
         //console.log(this.listaPessoa.length);
+        this.selecionados=0;
+        for(let x=0;x<this.listaPessoa.length;x++){
+          if(this.listaPessoa[x].selecionado){
+            this.selecionados++;
+          }
+        }
       }
     });
   }
@@ -83,6 +94,9 @@ export class Tab1Page {
       }
         this.listaPessoa.push(listaAntiga[x]);
     }
+
+
+
     this.storage.set('listaPessoa', this.listaPessoa).then((val) => {
       this.buscarTodos();
     });
