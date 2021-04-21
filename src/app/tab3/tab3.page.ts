@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
+import { AdmobService } from '../services/admob.service';
+import { AdMobFree, AdMobFreeBannerConfig, AdMobFreeInterstitialConfig, AdMobFreeRewardVideoConfig } from '@ionic-native/admob-free/ngx';
+
 
 @Component({
   selector: 'app-tab3',
@@ -9,9 +12,9 @@ import { Storage } from '@ionic/storage';
 })
 export class Tab3Page {
 
-timea=0;
-timeb=0;
-  constructor(public alertController: AlertController, private storage: Storage,) {
+  timea = 0;
+  timeb = 0;
+  constructor(private admobFree: AdMobFree, private admobService: AdmobService, public alertController: AlertController, private storage: Storage,) {
 
     this.storage.get('timea').then((vall) => {
       if (vall != null) {
@@ -25,77 +28,88 @@ timeb=0;
     });
   }
 
+  ionViewWillEnter() {
+    // this.admobService.showInterstitial();
 
-
-async zerar(){
-
-  const alert = await this.alertController.create({
-    cssClass: 'my-custom-class',
-    header: 'Opaa',
-    message: 'Tá certo disso? Zerar??',
-    buttons: [
-      {
-        text: 'Deixa',
-        role: 'cancel',
-        cssClass: 'secondary',
-        handler: (blah) => {
-          console.log('Confirm Cancel: blah');
-        }
-      }, {
-        text: 'Claro',
-        handler: () => {
-          this.timea=0
-          this.timeb=0
-          this.storage.set('timea', this.timea);
-          this.storage.set('timeb', this.timeb);
-        }
-      }
-    ]
-  });
-
-  await alert.present();
-
-}
-
-adicionar(time){
-  if(time=='a'){
-    this.timea++;
-    this.storage.set('timea', this.timea);
-  }else{
-    this.timeb++;
-    this.storage.set('timeb', this.timeb);
+    let interstitialConfig: AdMobFreeInterstitialConfig = {
+      isTesting: false, // Remove in production
+      autoShow: true,
+      id:"ca-app-pub-2148105901377599/6571413440"
+    };
+    this.admobFree.interstitial.config(interstitialConfig);
+    this.admobFree.interstitial.prepare().then(() => {
+    }).catch(e => alert(e));
   }
-}
 
-  async remover(time){
-   const alert = await this.alertController.create({
-     cssClass: 'my-custom-class',
-     header: 'Confirma aee',
-     message: 'Quer realmente tirar um pontinho???',
-     buttons: [
-       {
-         text: 'Não',
-         role: 'cancel',
-         cssClass: 'secondary',
-         handler: (blah) => {
-           console.log('Confirm Cancel: blah');
-         }
-       }, {
-         text: 'Claro, time ruim!',
-         handler: () => {
-           if(time=='a'){
-             this.timea--;
-             this.storage.set('timea', this.timea);
-           }else{
-             this.timeb--;
-             this.storage.set('timeb', this.timeb);
-           }
-         }
-       }
-     ]
-   });
+  async zerar() {
 
-   await alert.present();
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Opaa',
+      message: 'Tá certo disso? Zerar??',
+      buttons: [
+        {
+          text: 'Deixa',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Claro',
+          handler: () => {
+            this.timea = 0
+            this.timeb = 0
+            this.storage.set('timea', this.timea);
+            this.storage.set('timeb', this.timeb);
+          }
+        }
+      ]
+    });
 
-}
+    await alert.present();
+
+  }
+
+  adicionar(time) {
+    if (time == 'a') {
+      this.timea++;
+      this.storage.set('timea', this.timea);
+    } else {
+      this.timeb++;
+      this.storage.set('timeb', this.timeb);
+    }
+  }
+
+  async remover(time) {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Confirma aee',
+      message: 'Quer realmente tirar um pontinho???',
+      buttons: [
+        {
+          text: 'Não',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Claro, time ruim!',
+          handler: () => {
+            if (time == 'a') {
+              this.timea--;
+              this.storage.set('timea', this.timea);
+            } else {
+              this.timeb--;
+              this.storage.set('timeb', this.timeb);
+            }
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+
+  }
 }

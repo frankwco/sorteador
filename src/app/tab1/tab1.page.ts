@@ -1,6 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { AlertController } from '@ionic/angular';
+import { Router } from '@angular/router';
+import { AdmobService } from '../services/admob.service';
+import { AdMobFree, AdMobFreeBannerConfig, AdMobFreeInterstitialConfig, AdMobFreeRewardVideoConfig } from '@ionic-native/admob-free/ngx';
+
 
 @Component({
   selector: 'app-tab1',
@@ -8,13 +12,13 @@ import { AlertController } from '@ionic/angular';
   styleUrls: ['tab1.page.scss']
 })
 export class Tab1Page {
- @ViewChild('nome') myInput ;
+  @ViewChild('nome') myInput;
   pessoa;
   listaPessoa = [];
-  selecionar=false;
-  selecionados=0;
+  selecionar = false;
+  selecionados = 0;
 
-  constructor(private storage: Storage, public alertController: AlertController) {
+  constructor(private admobFree: AdMobFree, private admobService: AdmobService, private router: Router, private storage: Storage, public alertController: AlertController) {
     this.pessoa = { id: '', nome: '', selecionado: true };
 
     // set a key/value
@@ -25,10 +29,27 @@ export class Tab1Page {
     //  console.log('Your age is', val);
     //});
     this.buscarTodos();
+
+  }
+  ionViewDidEnter() {
+    //alert("HERRE");
+    let bannerConfig: AdMobFreeBannerConfig = {
+      isTesting: false, // Remove in production
+      autoShow: true,
+      id:"ca-app-pub-2148105901377599/6535052751"
+    };
+    this.admobFree.banner.config(bannerConfig);
+
+    this.admobFree.banner.prepare().then(() => {
+      // success
+    }).catch(e => alert(e));
+    //this.admobService.showBanner();
   }
 
-  chamarTab2(){
-    
+  chamarTab2() {
+
+    this.router.navigate(['tabs/tab2'])
+
   }
 
   buscarTodos() {
@@ -36,9 +57,9 @@ export class Tab1Page {
       if (val != null) {
         this.listaPessoa = val;
         //console.log(this.listaPessoa.length);
-        this.selecionados=0;
-        for(let x=0;x<this.listaPessoa.length;x++){
-          if(this.listaPessoa[x].selecionado){
+        this.selecionados = 0;
+        for (let x = 0; x < this.listaPessoa.length; x++) {
+          if (this.listaPessoa[x].selecionado) {
             this.selecionados++;
           }
         }
@@ -73,8 +94,8 @@ export class Tab1Page {
     let listaAntiga = this.listaPessoa;
     this.listaPessoa = [];
     for (let x = 0; x < listaAntiga.length; x++) {
-        listaAntiga[x].selecionado = !this.selecionar;
-        this.listaPessoa.push(listaAntiga[x]);
+      listaAntiga[x].selecionado = !this.selecionar;
+      this.listaPessoa.push(listaAntiga[x]);
 
     }
     this.storage.set('listaPessoa', this.listaPessoa).then((val) => {
@@ -88,11 +109,11 @@ export class Tab1Page {
     let listaAntiga = this.listaPessoa;
     this.listaPessoa = [];
     for (let x = 0; x < listaAntiga.length; x++) {
-      if(listaAntiga[x].id==id){
+      if (listaAntiga[x].id == id) {
         //console.log("asd "+id)
         listaAntiga[x].selecionado = !listaAntiga[x].selecionado;
       }
-        this.listaPessoa.push(listaAntiga[x]);
+      this.listaPessoa.push(listaAntiga[x]);
     }
 
 

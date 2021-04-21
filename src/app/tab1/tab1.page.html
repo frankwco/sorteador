@@ -27,7 +27,7 @@
         <ion-button color="primary" (click)="inserirPessoa()">Add</ion-button>
     </ion-item>
 
-    <ion-item lines="none">
+    <ion-item lines="none" *ngIf="listaPessoa.length>0">
         <ion-checkbox [(ngModel)]="selecionar" (click)="selecionarTodos()"></ion-checkbox>
         <ion-label>
             <h5>&nbsp;&nbsp;Marcar/Desmarcar Todos</h5>
@@ -47,7 +47,7 @@
         </ion-item>
     </ion-list>
 
-    <ion-card>
+    <ion-card *ngIf="listaPessoa.length>0">
         <!-- <ion-card-header>
             <ion-card-title>Totais</ion-card-title>
         </ion-card-header>-->
@@ -77,7 +77,7 @@
     </ion-card>
 
     <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-        <ion-fab-button>
+        <ion-fab-button (click)="chamarTab2()">
             <ion-icon name="color-wand-outline"></ion-icon>
         </ion-fab-button>
     </ion-fab>

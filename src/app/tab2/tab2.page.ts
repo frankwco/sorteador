@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+import { Router } from '@angular/router';
+import { AdmobService } from '../services/admob.service';
 
 @Component({
   selector: 'app-tab2',
@@ -16,41 +18,79 @@ export class Tab2Page {
   selecionar = false;
   quantidade: number = 2;
   sortearPor = "pessoas";
+  abrindoTela = 0;
+  selecionados = 0;
 
-  constructor(private socialSharing: SocialSharing, private storage: Storage, public alertController: AlertController) {
+  constructor(private admobService: AdmobService, private router: Router, private socialSharing: SocialSharing, private storage: Storage, public alertController: AlertController) {
     //console.log("construtor")
+  }
 
+  ionViewWillEnter() {
     this.buscarTodos();
-
+    this.abrindoTela = 1;
+    //this.admobService.showBanner();
   }
 
   compartilhar() {
-    let m='';
+    let m = '';
 
-  for(let x=0; x<this.times.length;x++){
-    if(m.length>1){
-      m+="\n\n";
-    }
-    m+=this.times[x].nome+": ";
-    for(let y=0;y<this.listaPessoa.length;y++){
-      if(this.times[x].id == this.listaPessoa[y].time){
-        m+=this.listaPessoa[y].nome+" - ";
+    for (let x = 0; x < this.times.length; x++) {
+      if (m.length > 1) {
+        m += "\n\n";
       }
+      m += this.times[x].nome + ": ";
+      for (let y = 0; y < this.listaPessoa.length; y++) {
+        if (this.times[x].id == this.listaPessoa[y].time) {
+          m += this.listaPessoa[y].nome + " - ";
+        }
+      }
+      if (m[m.length - 2] == '-') {
+        m = m.substring(0, m.length - 2);
+      }
+      //console.log("asd "+m[m.length-2]);
+      //console.log(m);
     }
-    if(m[m.length-2]=='-'){
-      m=m.substring(0, m.length-2);
-    }
-    //console.log("asd "+m[m.length-2]);
-    //console.log(m);
+
+
+    // Share via email
+    this.socialSharing.share(m, null, null, null).then((err) => {
+      // Success!
+    }).catch((err) => {
+      // Error!
+    });
   }
 
+  chamarTab1() {
 
-  // Share via email
-  this.socialSharing.share(m, null, null, null).then((err) => {
-    // Success!
-  }).catch((err) => {
-    // Error!
-  });
+    this.router.navigate(['tabs/tab1'])
+
+  }
+
+  async confirmaExcluirTimes() {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Confirmar!',
+      message: 'Existe um sorteio que foi realizado anteriormente, quer excluir??? Certeza??',
+      buttons: [
+        {
+          text: 'Humm, Não!!',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            //console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Sim, agora!!',
+          handler: () => {
+            this.storage.remove('listaTime').then((val) => {
+              this.times = [];
+            });
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
   buscarTodos() {
@@ -58,11 +98,23 @@ export class Tab2Page {
     this.storage.get('listaTime').then((val) => {
       if (val != null) {
         this.times = val;
-        //console.log(this.times.length)
+        if (this.times.length > 0 && this.abrindoTela == 1) {
+          this.abrindoTela = 0;
+          this.confirmaExcluirTimes();
+        } else {
+          this.abrindoTela = 0;
+
+        }
       }
       this.storage.get('listaPessoa').then((vall) => {
         if (vall != null) {
           this.listaPessoa = vall;
+          this.selecionados = 0;
+          for (let x = 0; x < this.listaPessoa.length; x++) {
+            if (this.listaPessoa[x].selecionado) {
+              this.selecionados++;
+            }
+          }
         }
       });
     });

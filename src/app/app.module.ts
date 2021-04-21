@@ -10,6 +10,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { IonicStorageModule } from '@ionic/storage';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+import { AdMobFree } from '@ionic-native/admob-free/ngx'; 
+import { AdmobService } from './services/admob.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -19,6 +21,8 @@ import { SocialSharing } from '@ionic-native/social-sharing/ngx';
     StatusBar,
     SplashScreen,
     SocialSharing,
+    AdMobFree,
+    AdmobService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
