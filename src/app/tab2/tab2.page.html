@@ -66,9 +66,9 @@
     <ion-button color="primary" expand="block" (click)="realizarSorteio()">Sortear</ion-button>
 
     <ion-list>
-        <div *ngFor="let time of times">
-            <ion-list-header color="secondary">
-                <h3>{{time.nome}}</h3>
+        <div *ngFor="let time of times;  let i = index">
+            <ion-list-header color="secondary" (click)="mudarNomeTime(i)">
+                <h3>{{time.nome}}</h3><ion-button color="light"><ion-icon name="pencil-outline"></ion-icon></ion-button>
             </ion-list-header>
             <div *ngFor="let jog of listaPessoa">
                 <ion-item *ngIf="jog.time==time.id">
@@ -77,6 +77,12 @@
             </div>
         </div>
     </ion-list>
+
+    <ion-fab vertical="bottom"  horizontal="end" slot="fixed">
+        <ion-fab-button color="danger" (click)="compartilhar()">
+            <ion-icon name="share-social-outline"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
 
 </ion-content>
 <ion-footer>

@@ -3,7 +3,7 @@ import { AlertController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { AdmobService } from '../services/admob.service';
 import { AdMobFree, AdMobFreeBannerConfig, AdMobFreeInterstitialConfig, AdMobFreeRewardVideoConfig } from '@ionic-native/admob-free/ngx';
-
+import { ControleExibicao } from '../services/ControleExibicao';
 
 @Component({
   selector: 'app-tab3',
@@ -11,7 +11,7 @@ import { AdMobFree, AdMobFreeBannerConfig, AdMobFreeInterstitialConfig, AdMobFre
   styleUrls: ['tab3.page.scss']
 })
 export class Tab3Page {
-
+  controleExibicao = ControleExibicao.getInstance();
   timea = 0;
   timeb = 0;
   constructor(private admobFree: AdMobFree, private admobService: AdmobService, public alertController: AlertController, private storage: Storage,) {
@@ -30,7 +30,7 @@ export class Tab3Page {
 
   ionViewWillEnter() {
     // this.admobService.showInterstitial();
-
+    this.controleExibicao.tela = 3;
     let interstitialConfig: AdMobFreeInterstitialConfig = {
       isTesting: false, // Remove in production
       autoShow: true,

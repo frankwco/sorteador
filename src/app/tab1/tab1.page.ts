@@ -4,7 +4,7 @@ import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { AdmobService } from '../services/admob.service';
 import { AdMobFree, AdMobFreeBannerConfig, AdMobFreeInterstitialConfig, AdMobFreeRewardVideoConfig } from '@ionic-native/admob-free/ngx';
-
+import { ControleExibicao } from '../services/ControleExibicao';
 
 @Component({
   selector: 'app-tab1',
@@ -12,11 +12,13 @@ import { AdMobFree, AdMobFreeBannerConfig, AdMobFreeInterstitialConfig, AdMobFre
   styleUrls: ['tab1.page.scss']
 })
 export class Tab1Page {
+  controleExibicao = ControleExibicao.getInstance();
   @ViewChild('nome') myInput;
   pessoa;
   listaPessoa = [];
   selecionar = false;
   selecionados = 0;
+  abriu = 0;
 
   constructor(private admobFree: AdMobFree, private admobService: AdmobService, private router: Router, private storage: Storage, public alertController: AlertController) {
     this.pessoa = { id: '', nome: '', selecionado: true };
@@ -32,18 +34,44 @@ export class Tab1Page {
 
   }
   ionViewDidEnter() {
+    this.controleExibicao.tela = 1;
     //alert("HERRE");
     let bannerConfig: AdMobFreeBannerConfig = {
       isTesting: false, // Remove in production
       autoShow: true,
-      id:"ca-app-pub-2148105901377599/6535052751"
+      id: "ca-app-pub-2148105901377599/6535052751"
     };
     this.admobFree.banner.config(bannerConfig);
 
     this.admobFree.banner.prepare().then(() => {
       // success
     }).catch(e => alert(e));
+
     //this.admobService.showBanner();
+    if (this.abriu == 0) {
+      this.abriu = 1;
+      setTimeout(() => { this.abrirIntersticial() }, 4000);
+    } else {
+      if (this.abriu == 1) {
+        this.abriu = 2;
+        setTimeout(() => { this.abrirIntersticial() }, 30000);
+      } else {
+        setTimeout(() => { this.abrirIntersticial() }, 60000);
+      }
+    }
+  }
+
+  abrirIntersticial() {
+    if (this.controleExibicao.tela == 1) {
+      let interstitialConfig: AdMobFreeInterstitialConfig = {
+        isTesting: false, // Remove in production
+        autoShow: true,
+        id: "ca-app-pub-2148105901377599/7496428635"
+      };
+      this.admobFree.interstitial.config(interstitialConfig);
+      this.admobFree.interstitial.prepare().then(() => {
+      }).catch(e => alert(e));
+    }
   }
 
   chamarTab2() {

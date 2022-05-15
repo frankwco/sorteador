@@ -31,17 +31,66 @@ export class Tab2Page {
     //this.admobService.showBanner();
   }
 
+  async mudarNomeTime(indice) {
+    //alert(indice);
+
+    for (let x = 0; x < this.times.length; x++) {
+      if (x == indice) {
+
+        const alert = await this.alertController.create({
+          cssClass: 'my-custom-class',
+          header: 'Mudar nome',
+          message: 'Qual o novo nome do time?',
+          inputs: [
+            {
+              value: this.times[x].nome,
+              name: 'nome',
+              type: 'text',
+              placeholder: 'novo nome'
+            }
+
+          ],
+          buttons: [
+            {
+              text: 'CANCELAR',
+              role: 'cancel',
+              cssClass: 'secondary',
+              handler: (blah) => {
+              }
+            }, {
+              text: 'Confirmar',
+              handler: (value) => {
+
+                this.times[x].nome = value.nome;
+
+                this.storage.set('times', this.times).then((val) => {
+
+
+                });
+
+              }
+            }
+          ]
+        });
+
+        await alert.present();
+
+      }
+    }
+  }
+
+
   compartilhar() {
     let m = '';
 
     for (let x = 0; x < this.times.length; x++) {
       if (m.length > 1) {
-        m += "\n\n";
+        m += "\n";
       }
-      m += this.times[x].nome + ": ";
+      m += "*" + this.times[x].nome + "*\n ";
       for (let y = 0; y < this.listaPessoa.length; y++) {
         if (this.times[x].id == this.listaPessoa[y].time) {
-          m += this.listaPessoa[y].nome + " - ";
+          m += this.listaPessoa[y].nome + " \n ";
         }
       }
       if (m[m.length - 2] == '-') {
@@ -49,15 +98,16 @@ export class Tab2Page {
       }
       //console.log("asd "+m[m.length-2]);
       //console.log(m);
-    }
 
+    }
+    //alert(m);
 
     // Share via email
     this.socialSharing.share(m, null, null, null).then((err) => {
-      // Success!
+    // Success!
     }).catch((err) => {
-      // Error!
-    });
+    // Error!
+     });
   }
 
   chamarTab1() {
