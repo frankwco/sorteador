@@ -2,6 +2,7 @@ export class ControleExibicao {
     private static instance: ControleExibicao;
   
     public tela = 0;
+    public quantidadeTela3=0;
   
   
     private constructor() { }

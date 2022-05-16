@@ -30,6 +30,8 @@ export class Tab3Page {
 
   ionViewWillEnter() {
     // this.admobService.showInterstitial();
+    if(this.controleExibicao.quantidadeTela3==1||this.controleExibicao.quantidadeTela3==3||this.controleExibicao.quantidadeTela3==6||this.controleExibicao.quantidadeTela3==7||this.controleExibicao.quantidadeTela3==9||this.controleExibicao.quantidadeTela3==12){
+      
     this.controleExibicao.tela = 3;
     let interstitialConfig: AdMobFreeInterstitialConfig = {
       isTesting: false, // Remove in production
@@ -38,7 +40,9 @@ export class Tab3Page {
     };
     this.admobFree.interstitial.config(interstitialConfig);
     this.admobFree.interstitial.prepare().then(() => {
-    }).catch(e => alert(e));
+    }).catch(e => console.log(e));
+  }
+  this.controleExibicao.quantidadeTela3+=1;
   }
 
   async zerar() {
